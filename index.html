@@ -412,7 +412,18 @@ document.querySelectorAll('.rv').forEach(el=>{
 });
 const form=document.getElementById('leadForm');
 if(form){
-  const WA='5554984346602';
+  const WA_DEFAULT='5554984346602';
+  function onlyDigits(value){return String(value||'').replace(/\D/g,'');}
+  function normalizeWhats(value){
+    let digits=onlyDigits(value);
+    if(!digits)return WA_DEFAULT;
+    if(digits.length===10||digits.length===11)digits='55'+digits;
+    if(digits.length<12||digits.length>13)return WA_DEFAULT;
+    return digits;
+  }
+  const params=new URLSearchParams(window.location.search);
+  const WA=normalizeWhats(params.get('corretor')||params.get('whatsapp')||params.get('wa')||params.get('tel'));
+  const corretorNome=(params.get('nome')||params.get('corretor_nome')||'').trim();
   const err=document.getElementById('formError');
   const submit=form.querySelector('button[type="submit"]');
   const tipologiaGroup=document.getElementById('tipologiaGroup');
